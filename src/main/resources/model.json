@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "defaultSchema": "CSVSCHEMA",
+  "schemas": [
+    {
+      "name": "CSVSCHEMA",
+      "type": "custom",
+      "factory": "org.apache.calcite.adapter.csv.CsvSchemaFactory",
+      "operand": {
+        "directory": "/Users/anciank/IdeaProjects/My/src/main/resources/csvFIle"
+      }
+    }
+  ]
+}
