@@ -33,7 +33,7 @@ public class DataController {
     @PostMapping("/sendDataToBackend")
     public String sendDataToBackend(@RequestBody String data) throws Exception {
         Class.forName("org.apache.calcite.jdbc.Driver");
-        String temp = "jdbc:calcite:model="+ this.fpath+"\\model.json";
+        String temp = "jdbc:calcite:model="+ this.fpath + File.separator + "model.json";
         Connection connection = DriverManager.getConnection(temp);
         CalciteConnection calciteConnection = connection.unwrap(CalciteConnection.class);
         Statement statement = connection.createStatement();
@@ -77,7 +77,7 @@ public class DataController {
             return ResponseEntity.badRequest().body("文件不能为空");
         }
         // 设置保存文件的目录，可以根据实际需求修改
-        String uploadDir = this.fpath + "/TempFile";
+        String uploadDir = this.fpath + File.separator + "TempFile";
         Path directoryPath = Paths.get(uploadDir);
 
         if (!Files.exists(directoryPath)) {
@@ -107,8 +107,8 @@ public class DataController {
     @PostMapping("/changeJsonFile")
     public void changeJsonFile(@RequestBody String fileName) {
         // 输入文件夹路径和输出文件夹路径，根据实际情况修改
-        String inputFolderPath = this.fpath + "\\TempFile";
-        String outputFolderPath = this.fpath + "\\csvFile";
+        String inputFolderPath = this.fpath + File.separator +  "TempFile";
+        String outputFolderPath = this.fpath + File.separator + "csvFile";
 
         try {
             // 在输入文件夹中找到与给定文件名相同的文件
