@@ -12,6 +12,7 @@ import org.apache.calcite.schema.SchemaPlus;
 
 import java.io.*;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.sql.*;
@@ -33,7 +34,7 @@ public class DataController {
 
     @PostMapping("/sendDataToBackend")
     public String sendDataToBackend(@RequestBody String data) throws Exception {
-        data = URLDecoder.decode(data, "UTF-8");
+        data = URLDecoder.decode(data, StandardCharsets.UTF_8);
         data = data.replace("=", "");
         System.out.println(data);
         Class.forName("org.apache.calcite.jdbc.Driver");
@@ -46,6 +47,8 @@ public class DataController {
 
         // 提取 "sql" 字段的值
         String sqlQuery = jsonObject.getString("sql");
+
+        sqlQuery = sqlQuery.toUpperCase();
 
         String sql = sqlQuery;
 
