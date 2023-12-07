@@ -11,6 +11,7 @@ import org.apache.calcite.model.JsonRoot;
 import org.apache.calcite.schema.SchemaPlus;
 
 import java.io.*;
+import java.net.URLDecoder;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.sql.*;
@@ -32,6 +33,9 @@ public class DataController {
 
     @PostMapping("/sendDataToBackend")
     public String sendDataToBackend(@RequestBody String data) throws Exception {
+        data = URLDecoder.decode(data, "UTF-8");
+        data = data.replace("=", "");
+        System.out.println(data);
         Class.forName("org.apache.calcite.jdbc.Driver");
         String temp = "jdbc:calcite:model="+ this.fpath + File.separator + "model.json";
         Connection connection = DriverManager.getConnection(temp);
@@ -106,18 +110,23 @@ public class DataController {
 
     @PostMapping("/changeJsonFile")
     public void changeJsonFile(@RequestBody String fileName) {
+        String fileName_t = fileName;
+        fileName_t = fileName_t.replace("=", "");
         // 输入文件夹路径和输出文件夹路径，根据实际情况修改
         String inputFolderPath = this.fpath + File.separator +  "TempFile";
         String outputFolderPath = this.fpath + File.separator + "csvFile";
 
+        System.out.println(fileName_t);
+
         try {
             // 在输入文件夹中找到与给定文件名相同的文件
+            String finalFileName_t = fileName_t;
             Files.walkFileTree(Path.of(inputFolderPath), EnumSet.noneOf(FileVisitOption.class), Integer.MAX_VALUE,
                     new SimpleFileVisitor<Path>() {
                         @Override
                         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                            String fileWithoutExtension = removeFileExtension(file.getFileName().toString());
-                            if (fileWithoutExtension.equals(fileName)) {
+                            String fileWithoutExtension = file.getFileName().toString();
+                            if (fileWithoutExtension.equals(finalFileName_t)) {
                                 // 清空输出文件夹
                                 FileUtils.cleanDirectory(new File(outputFolderPath));
                                 // 复制文件到输出文件夹
