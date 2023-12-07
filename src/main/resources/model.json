@@ -4,7 +4,7 @@
     "factory": "org.apache.calcite.adapter.csv.CsvSchemaFactory",
     "name": "CSVSCHEMA",
     "type": "custom",
-    "operand": {"directory": "D:\\article\\Backend\\src\\main\\resources\\csvFIle"}
+    "operand": {"directory": "src/main/resources/csvFIle"}
   }],
   "version": "1.0"
 }

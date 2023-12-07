@@ -22,11 +22,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.EnumSet;
 
+import static java.nio.file.Files.createDirectories;
+
 @RestController
 @RequestMapping("/api")
 public class DataController {
 
-    private final String fpath = "D:\\article\\Backend\\src\\main\\resources";
+    private final String fpath = "src/main/resources";
 
     @PostMapping("/sendDataToBackend")
     public String sendDataToBackend(@RequestBody String data) throws Exception {
@@ -70,12 +72,18 @@ public class DataController {
 
 //    保存文件
     @PostMapping("/addDataset")
-    public ResponseEntity<String> handleFileUpload( @RequestParam("file") MultipartFile file){
+    public ResponseEntity<String> handleFileUpload( @RequestParam("file") MultipartFile file) throws IOException {
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("文件不能为空");
         }
         // 设置保存文件的目录，可以根据实际需求修改
-        String uploadDir = this.fpath + "\\TempFile";
+        String uploadDir = this.fpath + "/TempFile";
+        Path directoryPath = Paths.get(uploadDir);
+
+        if (!Files.exists(directoryPath)) {
+            createDirectories(directoryPath);
+        }
+
 
         try {
             // 获取文件的字节数组并保存到本地
